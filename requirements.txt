@@ -1,5 +1,4 @@
 streamlit        # Core library for building the app
-requests          # For API calls
-base64                      # Standard library, no need to install separately
+requests          # For API calls                   # Standard library, no need to install separately
 pandas              # Optional, if you process data frames elsewhere
 numpy              # Optional, useful for numeric operations
