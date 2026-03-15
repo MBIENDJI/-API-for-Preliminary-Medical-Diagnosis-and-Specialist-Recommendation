@@ -6,7 +6,7 @@ import base64
 # CONFIG
 # ===========================================================================
 
-API_BASE = "https://my-deployed-api.com/api"
+API_BASE = "http://127.0.0.1:8000/api"
 
 st.set_page_config(
     page_title="MediAssist — Health Diagnosis",
@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 # ===========================================================================
-# SYMPTOM GLOSSARY (local — always available, no API needed)
+# SYMPTOM GLOSSARY
 # ===========================================================================
 
 ALL_SYMPTOMS = sorted([
@@ -99,12 +99,7 @@ def load_image_b64(path):
 # STYLES
 # ===========================================================================
 
-def apply_welcome_style():
-    img_b64 = load_image_b64(r"C:\test_latex\zzz\v7.png")
-    logo_html = ""
-    if img_b64:
-        logo_html = f'<img src="data:image/png;base64,{img_b64}" style="width:80px;margin-bottom:16px;border-radius:50%;box-shadow:0 4px 20px rgba(0,0,0,0.15);">'
-
+def apply_welcome_style(logo_html=""):
     st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;600&display=swap');
@@ -114,10 +109,10 @@ def apply_welcome_style():
     }}
     .welcome-wrap {{
         max-width: 440px;
-        margin: 50px auto 0;
+        margin: 40px auto 0;
         background: white;
         border-radius: 22px;
-        padding: 48px 44px 40px;
+        padding: 36px 44px 28px;
         box-shadow: 0 10px 50px rgba(0,0,0,0.14);
         text-align: center;
     }}
@@ -130,7 +125,7 @@ def apply_welcome_style():
     .welcome-sub {{
         color: #999;
         font-size: 0.9rem;
-        margin-bottom: 30px;
+        margin-bottom: 8px;
         font-weight: 300;
     }}
     .stTextInput > div > input {{
@@ -199,13 +194,18 @@ def apply_inner_style():
 # ===========================================================================
 
 if st.session_state.step == "welcome":
-    apply_welcome_style()
 
-    # Render inputs inside centered container
+    img_b64 = load_image_b64(r"C:\test_latex\zzz\v7.png")
+    logo_html = ""
+    if img_b64:
+        logo_html = f'<img src="data:image/png;base64,{img_b64}" style="width:80px;margin-bottom:16px;border-radius:50%;box-shadow:0 4px 20px rgba(0,0,0,0.15);">'
+
+    apply_welcome_style(logo_html)
+
     _, col, _ = st.columns([1, 1.2, 1])
     with col:
-        st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-        username = st.text_input("Username", placeholder="your username", label_visibility="visible")
+        st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+        username = st.text_input("Username", placeholder="your username")
         password = st.text_input("Password", type="password", placeholder="••••••••")
 
         if st.button("Sign In →"):
@@ -228,7 +228,7 @@ if st.session_state.step == "welcome":
                     st.error(f"Cannot reach API: {e}")
 
         st.markdown(
-            "<p style='text-align:center;color:#aaa;font-size:0.8rem;margin-top:16px;'>"
+            "<p style='text-align:center;color:#aaa;font-size:0.8rem;margin-top:14px;'>"
             "Not a substitute for professional medical advice.</p>",
             unsafe_allow_html=True,
         )
@@ -337,7 +337,7 @@ elif st.session_state.step == "symptom_search":
                 st.session_state.selected_symptoms = []
                 st.rerun()
         else:
-            st.info("No symptoms added yet.\nSearch and click ➕ to add.")
+            st.info("No symptoms added yet. Search and click ➕ to add.")
         st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("---")
